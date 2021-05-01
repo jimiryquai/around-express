@@ -2,7 +2,7 @@
   "name": "around-express",
   "version": "1.0.0",
   "description": "`/public` — static files from the build of the React front-end app.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/jimiryquai/around-express/issues"
   },
-  "homepage": "https://github.com/jimiryquai/around-express#readme",
+  "homepage": ".",
   "devDependencies": {
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
