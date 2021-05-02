@@ -18,7 +18,7 @@ const doesUserExist = (req, res) => {
       }
     })
     .catch(() => {
-      res.status(500).send({ message: 'Requested resource not found' });
+      res.status(500).send({ message: 'Internal Server Error' });
     });
 };
 
@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
       res.status(200).send(JSON.parse(users));
     })
     .catch(() => {
-      res.status(500).send({ message: 'Requested resource not found' });
+      res.status(500).send({ message: 'Internal Server Error' });
     });
 });
 

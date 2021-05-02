@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
       res.status(200).send(JSON.parse(cards));
     })
     .catch(() => {
-      res.status(500).send({ message: 'Requested resource not found' });
+      res.status(500).send({ message: 'Internal Server Error' });
     });
 });
 
