@@ -17,9 +17,8 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', users);
-app.use('/cards', cards);
 app.use((req, res, next) => {
   req.user = {
     _id: '609443f9d400cb5d04f45fb8',
@@ -28,8 +27,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('*', (req, res) => {
-  res.status(404).send({ message: 'Requested resource not found' });
-});
+app.use('/users', users);
+app.use('/cards', cards);
+
+app.get('*', (req, res) => res.status(404).send({ message: 'Requested Resource Not Found' }));
 
 app.listen(PORT, () => {});

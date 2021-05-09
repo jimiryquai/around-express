@@ -3,8 +3,8 @@ const {
   getUsers,
   getUserById,
   createUser,
-  updateUserById,
-  updateUserAvatarById,
+  updateUser,
+  updateUserAvatar,
 } = require('../controllers/users');
 
 router.get('/', getUsers);
@@ -13,8 +13,8 @@ router.get('/:id', getUserById);
 
 router.post('/', createUser);
 
-router.patch('/:id', updateUserById);
+router.patch('/me', updateUser);
 
-router.patch('/:id', updateUserAvatarById);
+router.patch('/me/avatar', updateUserAvatar);
 
 module.exports = router;

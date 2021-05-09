@@ -1,34 +1,58 @@
 const User = require('../models/user');
 
-module.exports.getUsers = (req, res) => {
+const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      res.status(200).send({ data: users });
+      res.send({ data: users });
     })
     .catch(() => {
-      res.status(500).send({ message: 'Internal Server Error' });
+      res
+        .status(500)
+        .send({ message: 'Internal Server Error' });
     });
 };
 
-module.exports.getUserById = (req, res) => {
+const getUserById = (req, res) => {
   User.findById(req.params.id)
-    .then((user) => res.status(200).send({ data: user }))
-    .catch(() => res.status(404).send({ message: 'User Not Found' }));
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        res.status(404).send({ message: 'User Not Found' });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Invalid User Id' });
+      } else {
+        res
+          .status(500)
+          .send({ message: 'Internal Server Error' });
+      }
+    });
 };
 
-module.exports.createUser = (req, res) => {
+const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then((user) => res.status(200).send({ data: user }))
-    .catch(() => res.status(400).send({ message: 'Bad Request' }));
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'User Validation Failed' });
+      } else {
+        res
+          .status(500)
+          .send({ message: 'Internal Server Error' });
+      }
+    });
 };
 
-module.exports.updateUserById = (req, res) => {
+const updateUser = (req, res) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
-    req.params.id,
+    req.user._id,
     { name, about },
     {
       new: true,
@@ -36,15 +60,21 @@ module.exports.updateUserById = (req, res) => {
       upsert: true,
     },
   )
-    .then((user) => res.status(200).send({ data: user }))
-    .catch(() => res.status(404).send({ message: 'User Not Found' }));
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'User Validation Failed' });
+      } else {
+        res.status(500).send({ message: 'Internal Server Error' });
+      }
+    });
 };
 
-module.exports.updateUserAvatarById = (req, res) => {
+const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(
-    req.params.id,
+    req.user._id,
     {
       avatar,
     },
@@ -54,6 +84,20 @@ module.exports.updateUserAvatarById = (req, res) => {
       upsert: true,
     },
   )
-    .then((user) => res.status(200).send({ data: user }))
-    .catch(() => res.status(404).send({ message: 'User Not Found' }));
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'User Validation Failed' });
+      } else {
+        res.status(500).send({ message: 'Internal Server Error' });
+      }
+    });
+};
+
+module.exports = {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  updateUserAvatar,
 };
