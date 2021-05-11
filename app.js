@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
+const helmet = require('helmet');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 
@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
   useUnifiedTopology: true,
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
